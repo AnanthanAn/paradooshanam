@@ -1,28 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:paradooshanam/widgets/message_list.dart';
+import 'package:paradooshanam/widgets/send_message_widget.dart';
 
 class ChatScreen extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(stream: Firestore.instance.collection('chats').snapshots(),builder: (BuildContext ctx, AsyncSnapshot<QuerySnapshot> querySnapshot) {
-        if(querySnapshot.connectionState == ConnectionState.waiting){
-          return Center(child: CircularProgressIndicator(),);
-        }
-        final docs = querySnapshot.data.documents;
-        return ListView.builder(
-          itemBuilder: (ctx, index) => Container(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(docs[index]['message']),
-            ),
-          ),
-          itemCount:docs.length,
-        );
-      }
-
+      appBar: AppBar(
+        title: Text('Paradooshanam'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              })
+        ],
       ),
+      body:Column(children: <Widget>[
+        Expanded(child: MessageList()),
+        SendMessage()
+      ],)
     );
   }
 }
