@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SendMessage extends StatelessWidget {
@@ -17,14 +18,18 @@ class SendMessage extends StatelessWidget {
                 controller: _textInputController,
               ),
             ),
-            IconButton(icon: Icon(Icons.send,color: ThemeData().primaryColor,), onPressed: () {
+            IconButton(icon: Icon(Icons.send,color: ThemeData().primaryColor,), onPressed: () async{
               String _message = _textInputController.text;
               if(_message.isEmpty){
                 return;
               }
+              FirebaseUser user = await FirebaseAuth.instance.currentUser();
+              final userData = await Firestore.instance.collection('user').document(user.uid).get();
               Firestore.instance.collection('chats').add({
                 'message' : _message.trim(),
                 'timeStamp' : Timestamp.now(),
+                'userId' : user.uid,
+                'username' : userData['username']
               });
               _textInputController.clear();
             })
