@@ -20,6 +20,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StreamBuilder(stream: FirebaseAuth.instance.onAuthStateChanged,builder: (context, userSnapshot) {
+        if(userSnapshot.connectionState == ConnectionState.waiting){
+          return Center(child: CircularProgressIndicator());
+        }
+
         if(userSnapshot.hasData){
           return ChatScreen();
         }
