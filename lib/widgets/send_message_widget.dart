@@ -20,6 +20,7 @@ class SendMessage extends StatelessWidget {
             ),
             IconButton(icon: Icon(Icons.send,color: ThemeData().primaryColor,), onPressed: () async{
               String _message = _textInputController.text;
+              _textInputController.clear();
               if(_message.isEmpty){
                 return;
               }
@@ -31,7 +32,7 @@ class SendMessage extends StatelessWidget {
                 'userId' : user.uid,
                 'username' : userData['username']
               });
-              _textInputController.clear();
+
             })
           ],
         ),
